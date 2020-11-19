@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+G:/ProgettiUnifi/KMeans/main.cpp
+stdio.h
+-
+time.h
+-
+random
+-
+limits.h
+-
+stdlib.h
+-
+math.h
+-
+omp.h
+-
+
