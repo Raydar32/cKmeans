@@ -1,4 +1,4 @@
-# Install script for directory: G:/ProgettiUnifi/KMeans
+# Install script for directory: G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "G:/ProgettiUnifi/KMeans/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

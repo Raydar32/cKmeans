@@ -1,3 +1,3 @@
-G:/ProgettiUnifi/KMeans/cmake-build-debug/CMakeFiles/KMeans.dir
-G:/ProgettiUnifi/KMeans/cmake-build-debug/CMakeFiles/edit_cache.dir
-G:/ProgettiUnifi/KMeans/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/cmake-build-debug/CMakeFiles/KMeans.dir
+G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/cmake-build-debug/CMakeFiles/rebuild_cache.dir

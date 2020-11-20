@@ -18,7 +18,7 @@
 
 #define COORD_MAX 100000		// <- coordinates range
 #define CLUSTER_NUM 20			// <- number of clusters
-#define POINT_NUM 10000000		// <- number of points
+#define POINT_NUM 1000000		// <- number of points
 #define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
 #define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
 #define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
@@ -206,7 +206,7 @@ __global__ void cuda_remove_points_cluster(float* clusters) {
 	clusters[id_cluster * CLUSTER_FEATURES + 3] = 0;
 }
 
-int main()
+int main()                                                        //<- program entry point.
 {
 	float* punti = (float*)malloc(POINT_NUM * POINT_FEATURES * sizeof(float));
 	float* clusters = (float*)malloc(CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));

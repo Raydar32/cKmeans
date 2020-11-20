@@ -1,13 +1,13 @@
 ﻿  Compiling CUDA source file kernel.cu...
   
   G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\cuda_k_means>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "G:\VisualStudio\VC\Tools\MSVC\14.27.29110\bin\HostX86\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc142.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\cuda_k_means\kernel.cu" 
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(107): warning : variable "dataToAppend" was declared but never referenced
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(111): warning : variable "dataToAppend" was declared but never referenced
   
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(170): warning : variable "flag" was set but never used
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(175): warning : variable "flag" was set but never used
   
   kernel.cu
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(43): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(92): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(112): warning C4244: 'inizializzazione': conversione da 'float' a 'int'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(107): warning C4101: 'dataToAppend': variabile locale senza riferimenti
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(45): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(95): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(116): warning C4244: 'inizializzazione': conversione da 'float' a 'int'. Possibile perdita di dati.
+G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(111): warning C4101: 'dataToAppend': variabile locale senza riferimenti
   cuda_k_means.vcxproj -> G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\x64\Debug\cuda_k_means.exe

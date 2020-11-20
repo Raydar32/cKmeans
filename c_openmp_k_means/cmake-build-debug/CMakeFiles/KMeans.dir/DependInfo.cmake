@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "G:/ProgettiUnifi/KMeans/main.cpp" "G:/ProgettiUnifi/KMeans/cmake-build-debug/CMakeFiles/KMeans.dir/main.cpp.obj"
+  "G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/main.cpp" "G:/GitHubRepo/Kmeans/cKmeans/c_openmp_k_means/cmake-build-debug/CMakeFiles/KMeans.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
