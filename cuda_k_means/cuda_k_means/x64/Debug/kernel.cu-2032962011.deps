@@ -4,34 +4,19 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_math.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_memcpy_s.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_memory.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_search.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_share.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_stdio_config.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_terminate.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wconio.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wctype.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wdirect.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wio.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wprocess.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wstdio.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wstdlib.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wstring.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\corecrt_wtime.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\crtdbg.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\ctype.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\errno.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\float.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\malloc.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\math.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\share.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stddef.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\string.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\sys\stat.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\sys\types.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\time.h
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\wchar.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\builtin_types.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\channel_descriptor.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\crt\common_functions.h
@@ -76,74 +61,19 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\vector_function
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\vector_functions.hpp
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include\vector_types.h
 G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\cuda_k_means\kernel.cu
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\algorithm
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\atomic
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cctype
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cerrno
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cfloat
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\chrono
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\climits
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cmath
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\concurrencysal.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\crtdefs.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cstddef
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cstdint
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cstdio
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cstdlib
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cstring
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\cwchar
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\eh.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\exception
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\fstream
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\initializer_list
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\intrin0.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\ios
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\iosfwd
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\iostream
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\istream
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\iterator
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\limits
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\limits.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\memory
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\new
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\ostream
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\random
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\ratio
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\sal.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\sstream
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\stdexcept
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\stdint.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\streambuf
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\string
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\system_error
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\typeinfo
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\type_traits
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\use_ansi.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\utility
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vadefs.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime_exception.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime_new.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime_new_debug.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime_string.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vcruntime_typeinfo.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\vector
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xatomic.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xcall_once.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xerrc.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xfacet
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xiosbase
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xkeycheck.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xlocale
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xlocinfo
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xlocinfo.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xlocnum
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xmemory
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xstddef
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xstring
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xtimec.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xtr1common
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\xutility
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\yvals.h
 G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\yvals_core.h
-G:\VisualStudio\VC\Tools\MSVC\14.27.29110\include\__msvc_system_error_abi.hpp

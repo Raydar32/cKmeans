@@ -1,4 +1,11 @@
 
+//'---------------------------------------------------------------------------------------
+//' File      : kernel.cu
+//' Author    : Alessandro Mini (mat. 7060381)
+//' Date      : 20/11/2020
+//' Purpose   : Main class for CUDA K-means clustering algorithm.
+//'---------------------------------------------------------------------------------------
+
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <stdio.h>
@@ -7,25 +14,17 @@
 #include <cuda.h>
 #include <time.h>
 
-#include <algorithm>
-#include <cfloat>
-#include <chrono>
-#include <fstream>
-#include <iostream>
-#include <random>
-#include <sstream>
-#include <stdexcept>
-#include <vector>
+//Here we have some defines:
 
-
-#define COORD_MAX 100000
-#define CLUSTER_NUM 20
-#define POINT_NUM 10000000
-#define POINT_FEATURES 3
-#define CLUSTER_FEATURES 4
-#define THREAD_PER_BLOCK 1024
+#define COORD_MAX 100000		// <- coordinates range
+#define CLUSTER_NUM 20			// <- number of clusters
+#define POINT_NUM 10000000		// <- number of points
+#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
+#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
+#define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
 
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+
 inline void gpuAssert(cudaError_t code, const char* file, int line, bool abort = true)
 {
 	if (code != cudaSuccess)
@@ -36,6 +35,10 @@ inline void gpuAssert(cudaError_t code, const char* file, int line, bool abort =
 }
 
 
+//'---------------------------------------------------------------------------------------
+//' Method    : random_float
+//' Purpose   : This method generates a random-ish float number in COORD_MAX.
+//'---------------------------------------------------------------------------------------
 float random_float() {
 	float x;
 	x = (float)rand() * (float)32767;
@@ -43,6 +46,11 @@ float random_float() {
 	return x;
 }
 
+
+//'---------------------------------------------------------------------------------------
+//' Method    : print_points
+//' Purpose   : Method to print points, mainly used for debug.
+//'---------------------------------------------------------------------------------------
 void print_points(float* punti) {
 	printf("----------- Punti -------------\n");
 	for (int i = 0; i < POINT_NUM; i++) {
@@ -53,6 +61,12 @@ void print_points(float* punti) {
 	}
 	printf("-------------------------------\n");
 }
+
+
+//'---------------------------------------------------------------------------------------
+//' Method    : print_clusters
+//' Purpose   : Method to print clusters, mainly used for debug.
+//'---------------------------------------------------------------------------------------
 void print_clusters(float* clusters) {
 	printf("----------- Cluster -------------\n");
 	for (int i = 0; i < CLUSTER_NUM; i++) {
@@ -64,20 +78,32 @@ void print_clusters(float* clusters) {
 	}
 	printf("-------------------------------\n");
 }
+
+
+//'---------------------------------------------------------------------------------------
+//' Method    : init_all
+//' Purpose   : This method will init points and clusters
+//'---------------------------------------------------------------------------------------
 void init_all(float* punti, float* clusters) {
-	for (int i = 0; i < POINT_NUM; i++) {			//punto: <x,y,cluster>
+	for (int i = 0; i < POINT_NUM; i++) {				// <- point: <x,y,cluster>
 		punti[i * POINT_FEATURES + 0] = random_float();
 		punti[i * POINT_FEATURES + 1] = random_float();
 		punti[i * POINT_FEATURES + 2] = 0;
 	}
 
-	for (int i = 0; i < CLUSTER_NUM; i++) {			//cluster: <centro,size_x,size_y,punti>
+	for (int i = 0; i < CLUSTER_NUM; i++) {				//<- cluster: <centro,size_x,size_y,punti>
 		clusters[i * CLUSTER_FEATURES + 0] = rand() % POINT_NUM;
 		clusters[i * CLUSTER_FEATURES + 1] = 0;
 		clusters[i * CLUSTER_FEATURES + 2] = 0;
 		clusters[i * CLUSTER_FEATURES + 3] = 0;
 	}
 }
+
+
+//'---------------------------------------------------------------------------------------
+//' Method    : write_to_file
+//' Purpose   : This method will print points and clusters in a GNUPLOT format 1:2:3
+//'---------------------------------------------------------------------------------------
 void write_to_file(float* punti) {
 	printf("\nStampo su file!\n");
 	FILE* fPtr;
@@ -91,16 +117,28 @@ void write_to_file(float* punti) {
 		fprintf(fPtr, "%f %f %d\n", x, y, cluster);
 	}
 }
+
+
+//'---------------------------------------------------------------------------------------
+//' Method    : distance
+//' Purpose   : here i calculate the euclidean distance between points, different
+//'				distances can be used, this method is called inside the GPU.
+//'---------------------------------------------------------------------------------------
 __device__ float distance(float x1, float x2, float y1, float y2) {
 	return sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)));
 }
 
 
-
+//'---------------------------------------------------------------------------------------
+//' Kernel function    : assign_clusters
+//' Purpose			   : With this kernel i use the GPU computational capabilities to 
+//'						 assign each point to each cluster, each point is mapped inside 
+//'						 a thread and it will use this code to find the cluster that fits
+//'						 better for itself.
+//'---------------------------------------------------------------------------------------
 __global__ void assign_clusters(float* punti, float* clusters) {
-
-	long id_punto = threadIdx.x + blockIdx.x * blockDim.x;
-	if (id_punto < POINT_NUM) {
+	long id_punto = threadIdx.x + blockIdx.x * blockDim.x;					// <- here i map the thread ID
+	if (id_punto < POINT_NUM) {												// <- out of memory check
 		float x_punto, x_cluster, y_punto, y_cluster = 0;
 		x_punto = punti[id_punto * POINT_FEATURES + 0];
 		y_punto = punti[id_punto * POINT_FEATURES + 1];
@@ -115,25 +153,27 @@ __global__ void assign_clusters(float* punti, float* clusters) {
 				distMax = distance(x_punto, x_cluster, y_punto, y_cluster);
 			}
 		}
+		//Output, i assign the results:
 
 		punti[id_punto * POINT_FEATURES + 2] = best_fit;
-		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 1], x_punto);
-		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 2], y_punto);
-		//clusters[best_fit * CLUSTER_FEATURES + 1] = clusters[best_fit * CLUSTER_FEATURES + 1] + x_punto;
-		//clusters[best_fit * CLUSTER_FEATURES + 2] = clusters[best_fit * CLUSTER_FEATURES + 2] + y_punto;
-		//clusters[best_fit * CLUSTER_FEATURES + 3] = clusters[best_fit * CLUSTER_FEATURES + 3] + 1;
-		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 3], 1);
-
-		//printf("id %d: Assegno il punto %f,%f al cluster %f\n",id_punto, x_punto, y_punto, punti[id_punto * POINT_FEATURES + 2]);
+		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 1], x_punto);		// <- here i have a critical section,
+		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 2], y_punto);		//	  two points can increment the same cluster
+		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 3], 1);			//    at the same time.
 	}
-
 }
 
+
+//'---------------------------------------------------------------------------------------
+//' Kernel function    : cluster_recomputecenters_cuda
+//' Purpose			   : With this kernel i use the GPU computational capabilities to 
+//'						 recomputer each cluster's center. In order to do this the main 
+//'						 method will spawn a single block with CLUSTER_NUM threads.
+//'						 each thread recomputes a cluster.
+//'---------------------------------------------------------------------------------------
 __global__ void cluster_recomputecenters_cuda(float* points, float* clusters) {
 
-	bool flag;
+	bool flag;																//< -here i map the thread ID
 	long id_cluster = threadIdx.x + blockIdx.x * blockDim.x;
-	//printf("Ricalcolo il cluster %d\n", id_cluster);
 	float sizeX = clusters[id_cluster * CLUSTER_FEATURES + 1];
 	float sizeY = clusters[id_cluster * CLUSTER_FEATURES + 2];
 	float nPoints = clusters[id_cluster * CLUSTER_FEATURES + 3];
@@ -151,12 +191,13 @@ __global__ void cluster_recomputecenters_cuda(float* points, float* clusters) {
 		points[cluster_center_index * POINT_FEATURES + 1] = newY;
 		flag = true;
 	}
-
-
-
-
 }
 
+
+//'---------------------------------------------------------------------------------------
+//' Kernel function    : cuda_remove_points_cluster
+//' Purpose			   : I use this kernel just to "zero" each cluster.
+//'---------------------------------------------------------------------------------------
 __global__ void cuda_remove_points_cluster(float* clusters) {
 	//<centro, size_x, size_y, punti>
 	long id_cluster = threadIdx.x + blockIdx.x * blockDim.x;
@@ -176,7 +217,7 @@ int main()
 	float* cluster_d = 0;
 
 	int iterazioni = 10;
-	clock_t begin = clock();
+
 
 	cudaMalloc(&punti_d, POINT_NUM * POINT_FEATURES * sizeof(float));
 	cudaMalloc(&cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));
@@ -184,20 +225,21 @@ int main()
 	cudaMemcpy(punti_d, punti, POINT_NUM * POINT_FEATURES * sizeof(float), cudaMemcpyHostToDevice);
 	cudaMemcpy(cluster_d, clusters, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float), cudaMemcpyHostToDevice);
 
+	clock_t begin = clock();
 	for (int i = 0; i < iterazioni; i++) {
-
-
 		assign_clusters << < (POINT_NUM + THREAD_PER_BLOCK - 1) / THREAD_PER_BLOCK, THREAD_PER_BLOCK >> > (punti_d, cluster_d);
 		cudaDeviceSynchronize();
 		cluster_recomputecenters_cuda << <1, CLUSTER_NUM >> > (punti_d, cluster_d);
 		cudaDeviceSynchronize();
 		cuda_remove_points_cluster << <1, CLUSTER_NUM >> > (cluster_d);
 		cudaDeviceSynchronize();
-		//clusters_recomputeCenter(punti, clusters);
 	}
+	cudaDeviceSynchronize();
+	clock_t end = clock();
+
 	cudaMemcpy(punti, punti_d, POINT_NUM * POINT_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaMemcpy(clusters, cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
-	clock_t end = clock();
+
 	float time_spent = (float)(end - begin) / CLOCKS_PER_SEC;
 	printf("Tempo %f", time_spent);
 	//print_points(punti);
