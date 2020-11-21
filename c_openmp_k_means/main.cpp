@@ -17,9 +17,12 @@
 //Here we have some defines:
 
 #define COORD_MAX 100000        // <- coordinates range
-#define CLUSTER_NUM 20          // <- number of clusters
+#define CLUSTER_NUM 30          // <- number of clusters
 #define POINT_NUM 1000000       // <- number of points
-#define NUM_THREAD 12            // <- number of threads (1=sequential.)
+#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
+#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
+#define NUM_THREAD 12           // <- number of threads (1=sequential.) tested on
+                                //    Ryzen 5 3600
 
 using namespace std;
 
@@ -39,7 +42,9 @@ float distance(float x1, float x2, float y1, float y2) {
 //'             execution.
 //'---------------------------------------------------------------------------------------
 bool clusters_recomputeCenter(float points[POINT_NUM][3],float clusters[CLUSTER_NUM][4]) { //cluster <punto,sizeX,sizeY,n_points>
+
     int acc = 0;
+#pragma omp parallel for default(none) shared(clusters,points,acc) num_threads(NUM_THREAD)
     for (int i = 0; i < CLUSTER_NUM; i++) {
         float newX = clusters[i][1] / clusters[i][3];
         float newY = clusters[i][2] / clusters[i][3];
@@ -53,6 +58,7 @@ bool clusters_recomputeCenter(float points[POINT_NUM][3],float clusters[CLUSTER_
         } else {
             points[cluster_center_index][0] = newX;
             points[cluster_center_index][1] = newY;
+#pragma omp atomic
             acc++;
         }
     }
@@ -114,7 +120,6 @@ void assignPoints(int id_punto1, float punti[POINT_NUM][3], float clusters[CLUST
 
 float clusters[CLUSTER_NUM][4];                             //<- here i define the cluster matrix.
 float punti[POINT_NUM][3];                                  //<- here i define the point matrix.
-
 //'---------------------------------------------------------------------------------------
 //' Method    : random_float
 //' Purpose   : This method generates a random-ish float number in COORD_MAX.
@@ -141,16 +146,12 @@ void write_to_file(float punti[POINT_NUM][3]) {
     }
 }
 
-int main() {                                                        //<- program entry point.
-    srand(time(NULL));
-
-
-    for (int i = 0; i < POINT_NUM; i++) {
+void init_all(float punti[POINT_NUM][3],float clusters[CLUSTER_NUM][4]){
+    for(int i = 0;i<POINT_NUM;i++){
         punti[i][0] = random_float();
         punti[i][1] = random_float();
         punti[i][2] = 0;
     }
-
     for (int j = 0; j < CLUSTER_NUM; j++) {
         clusters[j][0] = rand() % (POINT_NUM - 0) + 0;
         clusters[j][1] = 0;
@@ -158,6 +159,13 @@ int main() {                                                        //<- program
         clusters[j][3] = 0;
 
     }
+}
+
+int main() {                                                        //<- program entry point.
+    srand(time(NULL));
+
+    init_all(punti,clusters);
+
 
     printf("Avvio algoritmo di clustering\n");
     int it = 0;
