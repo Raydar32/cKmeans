@@ -17,14 +17,22 @@
 //Here we have some defines:
 
 #define COORD_MAX 100000		// <- coordinates range
-#define CLUSTER_NUM 20			// <- number of clusters
+#define CLUSTER_NUM 30			// <- number of clusters
 #define POINT_NUM 1000000		// <- number of points
 #define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
 #define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
 #define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
+#define IT_MAX 20               // <- number of iterations
+#define EPSILON 0.001           // <- value that extabilish the tolerance from which 2 points
+								//    are "near enough" to be considered the same point.
 
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 
+								
+//'---------------------------------------------------------------------------------------
+//' Method    : gpuAssert
+//' Purpose   : Method to check error in CUDA operations.
+//'---------------------------------------------------------------------------------------
 inline void gpuAssert(cudaError_t code, const char* file, int line, bool abort = true)
 {
 	if (code != cudaSuccess)
@@ -154,7 +162,6 @@ __global__ void assign_clusters(float* punti, float* clusters) {
 			}
 		}
 		//Output, i assign the results:
-
 		punti[id_punto * POINT_FEATURES + 2] = best_fit;
 		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 1], x_punto);		// <- here i have a critical section,
 		atomicAdd(&clusters[best_fit * CLUSTER_FEATURES + 2], y_punto);		//	  two points can increment the same cluster
@@ -170,10 +177,8 @@ __global__ void assign_clusters(float* punti, float* clusters) {
 //'						 method will spawn a single block with CLUSTER_NUM threads.
 //'						 each thread recomputes a cluster.
 //'---------------------------------------------------------------------------------------
-__global__ void cluster_recomputecenters_cuda(float* points, float* clusters) {
-
-	bool flag;																//< -here i map the thread ID
-	long id_cluster = threadIdx.x + blockIdx.x * blockDim.x;
+__global__ void cluster_recomputecenters_cuda(float* points, float* clusters) {													
+	long id_cluster = threadIdx.x + blockIdx.x * blockDim.x;			//< -here i map the thread ID
 	float sizeX = clusters[id_cluster * CLUSTER_FEATURES + 1];
 	float sizeY = clusters[id_cluster * CLUSTER_FEATURES + 2];
 	float nPoints = clusters[id_cluster * CLUSTER_FEATURES + 3];
@@ -182,15 +187,10 @@ __global__ void cluster_recomputecenters_cuda(float* points, float* clusters) {
 	long cluster_center_index = (long)clusters[id_cluster * CLUSTER_FEATURES + 0];
 	float x = points[cluster_center_index * POINT_FEATURES + 0];
 	float y = points[cluster_center_index * POINT_FEATURES + 1];
-
-	if (x == newX && y == newY) {
-		flag = false;
-	}
-	else {
+	if (!(fabsf(x - newX) < EPSILON && fabsf(y - newY) < EPSILON)) {
 		points[cluster_center_index * POINT_FEATURES + 0] = newX;
 		points[cluster_center_index * POINT_FEATURES + 1] = newY;
-		flag = true;
-	}
+	}	
 }
 
 
@@ -206,45 +206,48 @@ __global__ void cuda_remove_points_cluster(float* clusters) {
 	clusters[id_cluster * CLUSTER_FEATURES + 3] = 0;
 }
 
-int main()                                                        //<- program entry point.
+
+int main()                           //<- program entry point.
 {
 	float* punti = (float*)malloc(POINT_NUM * POINT_FEATURES * sizeof(float));
 	float* clusters = (float*)malloc(CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));
-
-	init_all(punti, clusters);
-
 	float* punti_d = 0;
 	float* cluster_d = 0;
 
-	int iterazioni = 10;
-
-
+	init_all(punti, clusters);		//<- init clusters and points.
+	
+	// Here i allocate memory and put points and clusters inside the gpu
 	cudaMalloc(&punti_d, POINT_NUM * POINT_FEATURES * sizeof(float));
 	cudaMalloc(&cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));
-
 	cudaMemcpy(punti_d, punti, POINT_NUM * POINT_FEATURES * sizeof(float), cudaMemcpyHostToDevice);
 	cudaMemcpy(cluster_d, clusters, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float), cudaMemcpyHostToDevice);
 
-	clock_t begin = clock();
-	for (int i = 0; i < iterazioni; i++) {
+	clock_t begin = clock();	   //<- start timing
+	for (int i = 0; i < IT_MAX; i++) {
+		//CUDA call to assign points:
 		assign_clusters << < (POINT_NUM + THREAD_PER_BLOCK - 1) / THREAD_PER_BLOCK, THREAD_PER_BLOCK >> > (punti_d, cluster_d);
-		cudaDeviceSynchronize();
+		gpuErrchk(cudaPeekAtLastError());
+		gpuErrchk(cudaDeviceSynchronize());
+		//CUDA call to recompute centers:
 		cluster_recomputecenters_cuda << <1, CLUSTER_NUM >> > (punti_d, cluster_d);
-		cudaDeviceSynchronize();
+		gpuErrchk(cudaPeekAtLastError());
+		gpuErrchk(cudaDeviceSynchronize());
+		//CUDA call to set each cluster to 0:
 		cuda_remove_points_cluster << <1, CLUSTER_NUM >> > (cluster_d);
-		cudaDeviceSynchronize();
+		gpuErrchk(cudaPeekAtLastError());
+		gpuErrchk(cudaDeviceSynchronize());
 	}
 	cudaDeviceSynchronize();
-	clock_t end = clock();
+	clock_t end = clock();		 //<- end timing
+	float time_spent = (float)(end - begin) / CLOCKS_PER_SEC;
 
+	//Here i take data back from GPU to PC
 	cudaMemcpy(punti, punti_d, POINT_NUM * POINT_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaMemcpy(clusters, cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
-
-	float time_spent = (float)(end - begin) / CLOCKS_PER_SEC;
+	
 	printf("Tempo %f", time_spent);
-	//print_points(punti);
-	//print_clusters(clusters);
+	
+	//write to file.
 	write_to_file(punti);
-
 }
 
