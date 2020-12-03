@@ -18,13 +18,17 @@
 
 #define COORD_MAX 100000        // <- coordinates range
 #define CLUSTER_NUM 100          // <- number of clusters
-#define POINT_NUM 10000000        // <- number of points
-#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
-#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
-#define NUM_THREAD 12            // <- number of threads (1=sequential.) tested on Ryzen5 3600
+#define POINT_NUM 100000        // <- number of points
+#define NUM_THREAD 12           // <- number of threads (1=sequential.) tested on Ryzen5 3600
 #define IT_MAX 20               // <- number of iterations
 #define EPSILON 0.001           // <- value that extabilish the tolerance from which 2 points
                                 //    are "near enough" to be considered the same point.
+
+#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
+#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
+
+
+
 
 using namespace std;
 
@@ -43,7 +47,7 @@ float distance(float x1, float x2, float y1, float y2) {
 //'             formula, there is a size sizeX and sizeY that accumulates during the
 //'             execution.
 //'---------------------------------------------------------------------------------------
-void clusters_recomputeCenter(float points[POINT_NUM][POINT_FEATURES],float clusters[CLUSTER_NUM][CLUSTER_FEATURES]) { //cluster <punto,sizeX,sizeY,n_points>
+void clusters_recomputeCenter(float points[POINT_NUM][POINT_FEATURES],float clusters[CLUSTER_NUM][CLUSTER_FEATURES]) {
     #pragma omp parallel for default(none) shared(clusters,points) num_threads(NUM_THREAD)
     for (int i = 0; i < CLUSTER_NUM; i++) {
         float newX = clusters[i][1] / clusters[i][3];
@@ -102,7 +106,6 @@ void assignPoints(int punto, float punti[POINT_NUM][POINT_FEATURES], float clust
     clusters[best_fit][2] = clusters[best_fit][2] + y_punto;
 #pragma omp atomic
     clusters[best_fit][3] = clusters[best_fit][3] + 1;
-
 };
 
 
@@ -126,12 +129,23 @@ void write_to_file(float punti[POINT_NUM][POINT_FEATURES]) {
     FILE *fPtr;
     char filePath[100] = {"G:\\file.dat"};
     char dataToAppend[1000];
+    FILE *ff = fopen("G:\\file.dat","w");
+    fclose(ff);
     fPtr = fopen(filePath, "a");
     for (int i = 0; i < POINT_NUM; i++) {
         fprintf(fPtr, "%f %f %f\n", punti[i][0], punti[i][1], punti[i][2]);
     }
+    fclose(fPtr);
 }
 
+
+//'---------------------------------------------------------------------------------------
+//' Method    : showPlot
+//' Purpose   : This uses GNUPLOT to plot data.
+//'---------------------------------------------------------------------------------------
+void showPlot(){
+    system(R"(gnuplot -p -e "plot 'G:\\file.dat' using 1:2:3 with points palette notitle")");
+}
 
 //'---------------------------------------------------------------------------------------
 //' Method    : init_all
@@ -148,7 +162,6 @@ void init_all(float punti[POINT_NUM][POINT_FEATURES],float clusters[CLUSTER_NUM]
         clusters[j][1] = 0;
         clusters[j][2] = 0;
         clusters[j][3] = 0;
-
     }
 }
 
@@ -160,7 +173,8 @@ int main() {                                    //<- program entry point.
 
     srand(time(NULL));
     init_all(punti,clusters);
-    printf("Avvio algoritmo di clustering\n");
+    printf("Press any key to start\n");
+    getchar();
     clock_t begin = clock();
    for(int i = 0; i< IT_MAX;i++){
 #pragma omp parallel for default(none) shared(punti, clusters) num_threads(NUM_THREAD)
@@ -169,11 +183,17 @@ int main() {                                    //<- program entry point.
         }
         clusters_recomputeCenter(punti, clusters);
         remove_points_from_clusters(clusters);
-        printf("it: %d\n", i);
+        printf("|", i);
     }
+   printf("\n");
     clock_t end = clock();
     float time_spent = (float) (end - begin) / CLOCKS_PER_SEC;
-    printf("Tempo : %f", time_spent);
+    printf("Elapsed time : %f ms", time_spent);
+    printf("\n.... writing to file ....\n");
     write_to_file(punti);
+    printf("\n\nPress any key to print...\n");
+    getchar();
+    showPlot();
+    exit(0);
     return 0;
 }

@@ -18,13 +18,16 @@
 
 #define COORD_MAX 100000		// <- coordinates range
 #define CLUSTER_NUM 100			// <- number of clusters
-#define POINT_NUM 10000000		// <- number of points
-#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
-#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
+#define POINT_NUM 1000000       // <- number of points
 #define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
 #define IT_MAX 20               // <- number of iterations
 #define EPSILON 0.001           // <- value that extabilish the tolerance from which 2 points
 								//    are "near enough" to be considered the same point.
+
+#define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
+#define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
+
+
 
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 
@@ -113,10 +116,11 @@ void init_all(float* punti, float* clusters) {
 //' Purpose   : This method will print points and clusters in a GNUPLOT format 1:2:3
 //'---------------------------------------------------------------------------------------
 void write_to_file(float* punti) {
-	printf("\nStampo su file!\n");
 	FILE* fPtr;
 	char filePath[100] = { "G:\\file.dat" };
 	char dataToAppend[1000];
+	FILE* ff = fopen("G:\\file.dat", "w");
+	fclose(ff);
 	fPtr = fopen(filePath, "a");
 	for (int i = 0; i < POINT_NUM; i++) {
 		float x = punti[i * POINT_FEATURES + 0];
@@ -124,6 +128,7 @@ void write_to_file(float* punti) {
 		int cluster = punti[i * POINT_FEATURES + 2];
 		fprintf(fPtr, "%f %f %d\n", x, y, cluster);
 	}
+	fclose(fPtr);
 }
 
 
@@ -207,15 +212,26 @@ __global__ void cuda_remove_points_cluster(float* clusters) {
 }
 
 
+//'---------------------------------------------------------------------------------------
+//' Method    : showPlot
+//' Purpose   : This uses GNUPLOT to plot data.
+//'---------------------------------------------------------------------------------------
+void showPlot() {
+	system(R"(gnuplot -p -e "plot 'G:\\file.dat' using 1:2:3 with points palette notitle")");
+}
+
+
 int main()                           //<- program entry point.
 {
+
 	float* punti = (float*)malloc(POINT_NUM * POINT_FEATURES * sizeof(float));
 	float* clusters = (float*)malloc(CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));
 	float* punti_d = 0;
 	float* cluster_d = 0;
 
 	init_all(punti, clusters);		//<- init clusters and points.
-	
+	printf("Press any key to start\n");
+	getchar();
 	// Here i allocate memory and put points and clusters inside the gpu
 	cudaMalloc(&punti_d, POINT_NUM * POINT_FEATURES * sizeof(float));
 	cudaMalloc(&cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float));
@@ -224,6 +240,7 @@ int main()                           //<- program entry point.
 
 	clock_t begin = clock();	   //<- start timing
 	for (int i = 0; i < IT_MAX; i++) {
+		printf("|", i);
 		//CUDA call to assign points:
 		assign_clusters << < (POINT_NUM + THREAD_PER_BLOCK - 1) / THREAD_PER_BLOCK, THREAD_PER_BLOCK >> > (punti_d, cluster_d);
 		gpuErrchk(cudaPeekAtLastError());
@@ -237,6 +254,7 @@ int main()                           //<- program entry point.
 		gpuErrchk(cudaPeekAtLastError());
 		gpuErrchk(cudaDeviceSynchronize());
 	}
+	printf("\n");
 	cudaDeviceSynchronize();
 	clock_t end = clock();		 //<- end timing
 	float time_spent = (float)(end - begin) / CLOCKS_PER_SEC;
@@ -244,10 +262,16 @@ int main()                           //<- program entry point.
 	//Here i take data back from GPU to PC
 	cudaMemcpy(punti, punti_d, POINT_NUM * POINT_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaMemcpy(clusters, cluster_d, CLUSTER_NUM * CLUSTER_FEATURES * sizeof(float), cudaMemcpyDeviceToHost);
-	
-	printf("Tempo %f", time_spent);
-	
+	cudaFree(punti_d);
+	cudaFree(cluster_d);
+
+	printf("Elapsed time : %f ms", time_spent);	
 	//write to file.
+	printf("\n.... writing to file ....\n");
 	write_to_file(punti);
+	printf("\n\nPress any key to print...\n");
+	getchar();
+	showPlot();
+	exit(0);
 }
 
