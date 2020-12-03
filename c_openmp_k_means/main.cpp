@@ -17,12 +17,12 @@
 //Here we have some defines:
 
 #define COORD_MAX 100000        // <- coordinates range
-#define CLUSTER_NUM 30          // <- number of clusters
-#define POINT_NUM 1000000       // <- number of points
+#define CLUSTER_NUM 100          // <- number of clusters
+#define POINT_NUM 10000000        // <- number of points
 #define POINT_FEATURES 3		// <- features of a point (x,y,cluster)
 #define CLUSTER_FEATURES 4		// <- feature of a cluster (center,sizex,sizey,npoints)
-#define NUM_THREAD 12           // <- number of threads (1=sequential.) tested on Ryzen5 3600
-#define IT_MAX 10               // <- number of iterations
+#define NUM_THREAD 12            // <- number of threads (1=sequential.) tested on Ryzen5 3600
+#define IT_MAX 20               // <- number of iterations
 #define EPSILON 0.001           // <- value that extabilish the tolerance from which 2 points
                                 //    are "near enough" to be considered the same point.
 
