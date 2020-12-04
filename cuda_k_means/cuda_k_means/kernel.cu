@@ -17,7 +17,7 @@
 //Here we have some defines:
 
 #define COORD_MAX 100000		// <- coordinates range
-#define CLUSTER_NUM 100			// <- number of clusters
+#define CLUSTER_NUM 10			// <- number of clusters
 #define POINT_NUM 1000000       // <- number of points
 #define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
 #define IT_MAX 20               // <- number of iterations
@@ -265,7 +265,7 @@ int main()                           //<- program entry point.
 	cudaFree(punti_d);
 	cudaFree(cluster_d);
 
-	printf("Elapsed time : %f ms", time_spent);	
+	printf("\nElapsed time : %f ms", time_spent);	
 	//write to file.
 	printf("\n.... writing to file ....\n");
 	write_to_file(punti);
