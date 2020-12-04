@@ -18,7 +18,7 @@
 
 #define COORD_MAX 100000		// <- coordinates range
 #define CLUSTER_NUM 10			// <- number of clusters
-#define POINT_NUM 1000000       // <- number of points
+#define POINT_NUM 10000         // <- number of points
 #define THREAD_PER_BLOCK 1024	// <- Thread per block (i'll test it on a GTX 950).
 #define IT_MAX 20               // <- number of iterations
 #define EPSILON 0.001           // <- value that extabilish the tolerance from which 2 points

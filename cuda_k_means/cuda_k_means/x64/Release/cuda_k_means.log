@@ -1,17 +1,2 @@
-﻿  Compiling CUDA source file kernel.cu...
-  
-  G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\cuda_k_means>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "G:\VisualStudio\VC\Tools\MSVC\14.27.29110\bin\HostX86\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"     --keep-dir x64\Release -maxrregcount=0  --machine 64 --compile -cudart static     -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /Fdx64\Release\vc142.pdb /FS   /MD " -o x64\Release\kernel.cu.obj "G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\cuda_k_means\kernel.cu" 
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(121): warning : variable "dataToAppend" was declared but never referenced
-  
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(243): warning : the format string ends before this argument
-  
-  kernel.cu
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(56): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(106): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(128): warning C4244: 'inizializzazione': conversione da 'float' a 'int'. Possibile perdita di dati.
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(121): warning C4101: 'dataToAppend': variabile locale senza riferimenti
-G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(243): warning C4474: 'printf': sono stati passati troppi argomenti per la stringa di formato
-  G:/GitHubRepo/Kmeans/cKmeans/cuda_k_means/cuda_k_means/kernel.cu(243): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-     Creazione della libreria G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\x64\Release\cuda_k_means.lib e dell'oggetto G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\x64\Release\cuda_k_means.exp
-  LINK : è stata specificata l'opzione /LTCG ma non è richiesta la generazione del codice; rimuovere /LTCG dalla riga di comando del collegamento per migliorare le prestazioni del linker
-  cuda_k_means.vcxproj -> G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\x64\Release\cuda_k_means.exe
+﻿G:\VisualStudio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: la directory intermedia (x64\Release\) contiene file condivisi da un altro progetto (cuda_k_means.vcxproj). Tale condizione può comportare un comportamento di pulizia e ricompilazione non corretto.
+  cuda_k_means.vcxproj -> G:\GitHubRepo\Kmeans\cKmeans\cuda_k_means\x64\Release\CUDA_source.exe
