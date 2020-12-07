@@ -21,7 +21,7 @@ every CUDA thread represent a point, each point will find his best fitting clust
 There will be parallelization also in other parts.
 
 ### Screenshot
-![alt text](https://ibb.co/bs8YD6r)
+![alt text](https://i.ibb.co/N9HfbFL/Screen-per-readme.png)
 nb: gnuplot http://www.gnuplot.info/ has been used for plotting.
 
 ### License
