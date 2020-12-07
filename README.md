@@ -22,7 +22,7 @@ There will be parallelization also in other parts.
 
 ### Screenshot
 ![alt text](https://i.ibb.co/N9HfbFL/Screen-per-readme.png)
-nb: gnuplot http://www.gnuplot.info/ has been used for plotting.
+Gnuplot http://www.gnuplot.info/ has been used for plotting.
 
 ### License
 Licensed under the term of MIT License.
