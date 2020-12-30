@@ -17,7 +17,7 @@
 //Here we have some defines:
 
 #define COORD_MAX 100000        // <- coordinates range
-#define CLUSTER_NUM 100          // <- number of clusters
+#define CLUSTER_NUM 10          // <- number of clusters
 #define POINT_NUM 100000        // <- number of points
 #define NUM_THREAD 12           // <- number of threads (1=sequential.) tested on Ryzen5 3600
 #define IT_MAX 20               // <- number of iterations
